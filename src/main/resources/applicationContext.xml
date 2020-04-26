@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	 xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	  xmlns:util="http://www.springframework.org/schema/util"
+	 xmlns:tx="http://www.springframework.org/schema/tx"
+	 xmlns:mvc="http://www.springframework.org/schema/mvc"
+	 xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/data/jpa
+        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd"
+         default-autowire="byName">
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+      <property name="url" value="jdbc:mysql://localhost:3306/odesk"></property>
+       <property name="username" value="root"></property>
+       <property name="password" value="p@@ssworD123"></property>
+   </bean>
+   <bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+   
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" autowire="default" primary="true">
+    <property name="entityManagerFactory" ref="entityManagerFactory" />
+</bean>
+<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+   autowire="byName">
+    <property name="dataSource" ref="dataSource"></property>
+    <property name="jpaVendorAdapter">
+        <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+            <property name="showSql" value="false"/>
+            <property name="generateDdl" value="true"/>
+            <property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+            
+        </bean>
+    </property>
+      <property name="packagesToScan" value="com.mediasoft.odeks" ></property>
+     </bean>
+     <bean class = "org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name = "prefix" value = "/WEB-INF/jsp/" />
+      <property name = "suffix" value = ".jsp" />
+   </bean>
+   <bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
+  <constructor-arg>
+    <list>
+     
+    </list>
+  </constructor-arg>
+</bean>
+<jpa:repositories base-package="com.mediasoft.odeks.repositories"></jpa:repositories>
+ <context:component-scan base-package = "com.mediasoft.odeks.webs" />
+
+ </beans>
